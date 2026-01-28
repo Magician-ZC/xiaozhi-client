@@ -36,6 +36,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pyinstaller pillow
+          
+          # 确保关键包已安装
+          pip install colorlog rich pendulum python-dateutil aiohttp websockets
+          pip install pynput pyperclip pypinyin psutil cryptography
+          pip install paho-mqtt mutagen beautifulsoup4 brotli requests
+          pip install qasync opencv-python-headless numpy
+          
+          # 验证 colorlog 安装
+          python -c "import colorlog; print(f'colorlog version: {colorlog.__version__}')"
+          python -c "import colorlog; print(f'colorlog path: {colorlog.__file__}')"
 
       - name: Convert icon to ICO
         run: |
@@ -44,7 +54,16 @@ jobs:
 
       - name: Build with PyInstaller
         run: |
-          pyinstaller xiaozhi.spec --clean --noconfirm
+          # 使用 --collect-all 确保完整收集模块
+          pyinstaller xiaozhi.spec --clean --noconfirm --collect-all colorlog --collect-all rich --collect-all pendulum
+          
+      - name: Verify build contents
+        run: |
+          echo "=== Checking dist folder ==="
+          dir dist\小智\_internal | findstr colorlog || echo "WARNING: colorlog not found in _internal"
+          dir dist\小智\_internal\colorlog* 2>nul || echo "colorlog folder not found"
+        shell: cmd
+        continue-on-error: true
 
       - name: Get version
         id: version

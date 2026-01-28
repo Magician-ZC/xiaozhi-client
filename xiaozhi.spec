@@ -423,6 +423,11 @@ datas = datas + collected_datas
 binaries = binaries + collected_binaries
 hiddenimports = hiddenimports + collected_hiddenimports
 
+# 自定义 hooks 目录
+hooks_dir = project_root / "hooks"
+if not hooks_dir.exists():
+    hooks_dir.mkdir(parents=True, exist_ok=True)
+
 # Analysis
 a = Analysis(
     [MAIN_SCRIPT],
@@ -430,7 +435,7 @@ a = Analysis(
     binaries=binaries,
     datas=datas,
     hiddenimports=hiddenimports,
-    hookspath=[],
+    hookspath=[str(hooks_dir)],  # 使用自定义 hooks
     hooksconfig={},
     runtime_hooks=runtime_hooks,
     excludes=excludes,
