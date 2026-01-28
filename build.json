@@ -12,7 +12,8 @@
       "scripts:scripts",
       "src:src",
       "libs:libs",
-      "assets:assets"
+      "assets:assets",
+      "config:config"
     ],
     "clean": true,
     "noconfirm": true
